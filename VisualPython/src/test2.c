@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 // Implemented as static global variable to be accessible via callback
 static struct Label *label = 0;
@@ -21,7 +22,7 @@ void handle_button_click(struct Object *sender)
 
 int main(int argc, char *argv[])
 {
-    struct Application *app = Application_New();
+    struct Application *app = Application_New(&argc, argv);
     const char *app_class_name = Object_GetClassName((struct Object*) app);
     assert(0 == strcmp(app_class_name, "Application"));
 
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
     assert(0 == strcmp(button_class_name, "PushButton"));
 
     PushButton_SetText(button, "Click me");
-    PushButton_SetOnClicked(button, &handle_button_click);
+    PushButton_SetOnClicked(button, &handle_button_click); // !!
     Layout_AddWidget(layout, (struct Widget*) button);
 
     Widget_SetWindowTitle(main_window, "Test 2");

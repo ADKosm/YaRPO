@@ -81,7 +81,10 @@ struct PushButton* PushButton_New(struct Widget *parent) {
 void PushButton_SetText(struct PushButton *button, const char *text) {
     ((QPushButton*)button)->setText(QString(text));
 }
-//void PushButton_SetOnClicked(struct PushButton *button, NoArgumentsCallback *callback);
+void PushButton_SetOnClicked(struct PushButton *button, NoArgumentsCallback *callback) {
+    QPushButton* b = (QPushButton*)button;
+    QObject::connect(b, &QPushButton::clicked, [button, callback]{ callback((struct Object*) button); });
+}
 
 
 // ---

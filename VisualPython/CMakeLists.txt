@@ -19,8 +19,10 @@ set(HEADERS src/widgets.h)
 qt5_wrap_cpp(MOC_SOURCES ${HEADERS})
 
 add_executable(TEST_1 src/test1.c ${SRC_LIST} ${MOC_SOURCES})
+add_executable(TEST_2 src/test2.c ${SRC_LIST} ${MOC_SOURCES})
 
 target_link_libraries(TEST_1 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+target_link_libraries(TEST_2 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 #set(CMAKE_CXX_STANDARD 11)
 #
