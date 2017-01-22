@@ -8,11 +8,17 @@ sys.path.append(os.getcwd())
 
 from _pywidgets import *
 
+
 app = Application_New()
+print("Yo")
 assert "Application" == Object_GetClassName(app)
 
-main_window = Widget_New()
+print("Yo")
+
+main_window = Widget_New(app)
 assert "Widget" == Object_GetClassName(main_window)
+
+print("Yo")
 
 layout = VBoxLayout_New(main_window)
 assert "VBoxLayout" == Object_GetClassName(layout)
