@@ -14,4 +14,4 @@
 
 ##### In bin directory you can run TEST_1 and TEST_2
 
-##### In lib directory you can run test3.py
+##### In lib directory you can run test3.py, test4.py and test5.py
