@@ -27,8 +27,8 @@ add_executable(TEST_2 src/test2.c ${SRC_LIST} ${MOC_SOURCES})
 add_library(pywidgets SHARED src/pywidgets.c ${SRC_LIST} ${MOC_SOURCES})
 #add_library(testwid SHARED ${SRC_LIST} ${MOC_SOURCES})
 
-target_link_libraries(TEST_1 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES})
-target_link_libraries(TEST_2 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+target_link_libraries(TEST_1 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${PYTHON_LIBRARIES})
+target_link_libraries(TEST_2 ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${PYTHON_LIBRARIES})
 target_link_libraries(pywidgets ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${PYTHON_LIBRARIES})
 #target_link_libraries(testwid ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${PYTHON_LIBRARIES})
 

@@ -5,6 +5,7 @@
 #ifndef SHARE_WIDGETS_H
 #define SHARE_WIDGETS_H
 
+#include <Python.h>
 #include <stdbool.h>
 
 #ifdef __cplusplus
@@ -43,6 +44,7 @@ void Label_SetText(struct Label *label, const char *text);
 struct PushButton* PushButton_New(struct Widget *parent);
 void PushButton_SetText(struct PushButton *button, const char *text);
 void PushButton_SetOnClicked(struct PushButton *button, NoArgumentsCallback *callback);
+void PushButton_SetOnClickedPython(struct PushButton *button, PyObject* callback);
 
 #ifdef __cplusplus
 };

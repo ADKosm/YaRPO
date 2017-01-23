@@ -7,9 +7,6 @@ static char module_docstring[] =
 static char hello_docstring[] =
         "Simple GUI on python";
 
-int argc = 1;
-char argv[] = "GUI";
-
 static PyObject *pywidgets_hello(PyObject *self, PyObject *args);
 static PyObject *pywidgets_application_exec(PyObject *self, PyObject *args);
 static PyObject *pywidgets_application_new(PyObject *self, PyObject *args);
@@ -26,6 +23,7 @@ static PyObject *pywidgets_label_new(PyObject *self, PyObject *args);
 static PyObject *pywidgets_label_settext(PyObject *self, PyObject *args);
 static PyObject *pywidgets_pushbutton_new(PyObject *self, PyObject *args);
 static PyObject *pywidgets_pushbutton_settext(PyObject *self, PyObject *args);
+static PyObject *pywidgets_pushbutton_setonclicked(PyObject *self, PyObject *args);
 
 static PyMethodDef module_methods[] = {
         {"hello", pywidgets_hello, METH_VARARGS, hello_docstring},
@@ -44,6 +42,7 @@ static PyMethodDef module_methods[] = {
         {"Label_SetText", pywidgets_label_settext, METH_VARARGS, hello_docstring},
         {"PushButton_New", pywidgets_pushbutton_new, METH_VARARGS, hello_docstring},
         {"PushButton_SetText", pywidgets_pushbutton_settext, METH_VARARGS, hello_docstring},
+        {"PushButton_SetOnClicked", pywidgets_pushbutton_setonclicked, METH_VARARGS, hello_docstring},
         {NULL, NULL, 0, NULL}
 };
 
@@ -214,6 +213,17 @@ static PyObject *pywidgets_pushbutton_settext(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "Ls", &obj_l, &title)) return NULL;
 
     PushButton_SetText((struct PushButton*)obj_l, title);
+
+    return Py_BuildValue("i", NULL);
+}
+
+static PyObject *pywidgets_pushbutton_setonclicked(PyObject *self, PyObject *args) {
+    long long sender_l;
+    PyObject *function;
+
+    if(!PyArg_ParseTuple(args, "LO", &sender_l, &function)) return NULL;
+
+    PushButton_SetOnClickedPython((struct PushButton*)sender_l, function);
 
     return Py_BuildValue("i", NULL);
 }

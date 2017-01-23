@@ -2,6 +2,9 @@
 // Created by alex on 20.01.17.
 //
 
+#include <Python.h>
+#include <src/widgets.h>
+
 #include <QObject>
 #include <QApplication>
 #include <QWidget>
@@ -11,8 +14,6 @@
 #include <QPushButton>
 #include <string>
 #include <string.h>
-
-#include <src/widgets.h>
 
 extern "C" {
 
@@ -87,6 +88,10 @@ void PushButton_SetOnClicked(struct PushButton *button, NoArgumentsCallback *cal
     QObject::connect(b, &QPushButton::clicked, [button, callback]{ callback((struct Object*) button); });
 }
 
+void PushButton_SetOnClickedPython(struct PushButton *button, PyObject* callback) {
+    QPushButton* b = (QPushButton*)button;
+    QObject::connect(b, &QPushButton::clicked, [button, callback]{ PyObject_CallObject(callback, NULL); });
+}
 
 // ---
 }

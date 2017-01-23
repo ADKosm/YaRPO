@@ -8,12 +8,15 @@ from libpywidgets import *
 class Object:
     def __init__(self, p):
         self.pointer = p
+        self.toDel = True
 
     def get_class_name(self):
         return Object_GetClassName(self.pointer)
 
     # def __del__(self):
-    #     Object_Delete(self.pointer)
+    #     print(self.get_class_name())
+    #     if self.toDel:
+    #         Object_Delete(self.pointer)
 
 class Application(Object):
     def __init__(self):
@@ -24,6 +27,8 @@ class Application(Object):
 
 class Widget(Object):
     def __init__(self, parent = None):
+        if parent is not None:
+            self.toDel = False
         Object.__init__(self, Widget_New()) if parent is None else Object.__init__(self, Widget_New(parent.pointer))
 
     def set_layout(self, layout):
@@ -40,6 +45,8 @@ class Widget(Object):
 
 class Label(Widget):
     def __init__(self, parent = None):
+        if parent is not None:
+            self.toDel = False
         Object.__init__(self, Label_New()) if parent is None else Object.__init__(self, Label_New(parent.pointer))
 
     def set_text(self, text):
@@ -47,10 +54,19 @@ class Label(Widget):
 
 class PushButton(Widget):
     def __init__(self, parent = None):
+        self.calls = []
+        if parent is not None:
+            self.toDel = False
         Object.__init__(self, PushButton_New()) if parent is None else Object.__init__(self, PushButton_New(parent.pointer))
 
     def set_text(self, text):
         PushButton_SetText(self.pointer, text)
+
+    def set_on_clicked(self, callback):
+        def wraped_callback():
+            callback(self)
+        self.calls.append(wraped_callback)
+        PushButton_SetOnClicked(self.pointer, self.calls[-1])
 
 class Layout(Object):
     def add_widget(self, widget):
@@ -58,4 +74,6 @@ class Layout(Object):
 
 class VBoxLayout(Layout):
     def __init__(self, parent = None):
+        if parent is not None:
+            self.toDel = False
         Object.__init__(self, VBoxLayout_New()) if parent is None else Object.__init__(self, VBoxLayout_New(parent.pointer))
