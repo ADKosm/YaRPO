@@ -36,7 +36,7 @@ main_window.set_visible(True)
 def button_callback(sender):
     assert isinstance(sender, PushButton)
     assert "PushButton" == sender.get_class_name()
-    print("BOOOOOOO")
+    print("Кнопка была нажата!")
     label.set_text("Нажали на кнопку")
 
 button.set_on_clicked(button_callback)

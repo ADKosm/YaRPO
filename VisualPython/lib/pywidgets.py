@@ -6,17 +6,16 @@ sys.path.append(os.getcwd())
 from libpywidgets import *
 
 class Object:
-    def __init__(self, p):
+    def __init__(self, p, d = True):
         self.pointer = p
-        self.toDel = True
+        self.toDel = d
 
     def get_class_name(self):
         return Object_GetClassName(self.pointer)
 
-    # def __del__(self):
-    #     print(self.get_class_name())
-    #     if self.toDel:
-    #         Object_Delete(self.pointer)
+    def __del__(self):
+        if self.toDel:
+            Object_Delete(self.pointer)
 
 class Application(Object):
     def __init__(self):
@@ -27,9 +26,7 @@ class Application(Object):
 
 class Widget(Object):
     def __init__(self, parent = None):
-        if parent is not None:
-            self.toDel = False
-        Object.__init__(self, Widget_New()) if parent is None else Object.__init__(self, Widget_New(parent.pointer))
+        Object.__init__(self, Widget_New()) if parent is None else Object.__init__(self, Widget_New(parent.pointer), False)
 
     def set_layout(self, layout):
         Widget_SetLayout(self.pointer, layout.pointer)
@@ -45,9 +42,7 @@ class Widget(Object):
 
 class Label(Widget):
     def __init__(self, parent = None):
-        if parent is not None:
-            self.toDel = False
-        Object.__init__(self, Label_New()) if parent is None else Object.__init__(self, Label_New(parent.pointer))
+        Object.__init__(self, Label_New()) if parent is None else Object.__init__(self, Label_New(parent.pointer), False)
 
     def set_text(self, text):
         Label_SetText(self.pointer, text)
@@ -55,9 +50,7 @@ class Label(Widget):
 class PushButton(Widget):
     def __init__(self, parent = None):
         self.calls = []
-        if parent is not None:
-            self.toDel = False
-        Object.__init__(self, PushButton_New()) if parent is None else Object.__init__(self, PushButton_New(parent.pointer))
+        Object.__init__(self, PushButton_New()) if parent is None else Object.__init__(self, PushButton_New(parent.pointer), False)
 
     def set_text(self, text):
         PushButton_SetText(self.pointer, text)
@@ -74,6 +67,4 @@ class Layout(Object):
 
 class VBoxLayout(Layout):
     def __init__(self, parent = None):
-        if parent is not None:
-            self.toDel = False
-        Object.__init__(self, VBoxLayout_New()) if parent is None else Object.__init__(self, VBoxLayout_New(parent.pointer))
+        Object.__init__(self, VBoxLayout_New()) if parent is None else Object.__init__(self, VBoxLayout_New(parent.pointer), False)
