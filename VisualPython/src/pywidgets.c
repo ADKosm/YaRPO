@@ -74,9 +74,12 @@ static PyObject *pywidgets_application_new(PyObject *self, PyObject *args) {
     int *a = malloc(sizeof(int));
     *a = 1;
 
-    char *b = malloc(1);
-    *b = '\0';
-    return Py_BuildValue("L", (long long)Application_New(a, &b));
+    char** b = malloc( 1 * sizeof(char *));
+    b[0] = malloc(5);
+    strcpy(b[0], "abcd\0");
+    b[0][4] = '\0';
+
+    return Py_BuildValue("L", (long long)Application_New(a, b));
 }
 
 static PyObject *pywidgets_application_exec(PyObject *self, PyObject *args) {
@@ -124,29 +127,22 @@ static PyObject *pywidgets_layout_addwidget(PyObject *self, PyObject *args) {
 }
 
 static PyObject *pywidgets_widget_new(PyObject *self, PyObject *args) {
-    long long obj_l;
+    long long obj_l = 0;
 
-//    if (!PyArg_ParseTuple(args, "L", &obj_l)) {
-//        printf("ASDSSF\n");
-        return Py_BuildValue("L", (long long)Widget_New((struct Widget*)NULL));
-//    } else {
-//        return Py_BuildValue("L", (long long)Widget_New((struct Widget*)obj_l));
-//    }
+    if (!PyArg_ParseTuple(args, "|L", &obj_l)) {
+        return NULL;
+    }
+
+    return Py_BuildValue("L", (long long)Widget_New((struct Widget*)obj_l));
 }
 
 static PyObject *pywidgets_widget_setvisible(PyObject *self, PyObject *args) {
     long long obj_l;
     int v;
 
-    printf("2\n");
-
     if (!PyArg_ParseTuple(args, "Li", &obj_l, &v)) return NULL;
 
-    printf("3 - %d\n", v);
-
     Widget_SetVisible((struct Widget*)obj_l, (bool)v);
-
-    printf("7\n");
 
     return Py_BuildValue("i", NULL);
 }
@@ -178,7 +174,7 @@ static PyObject *pywidgets_setsize(PyObject *self, PyObject *args) {
 
     if (!PyArg_ParseTuple(args, "Lii", &obj_l, &w, &h)) return NULL;
 
-    Widget_SetSize((struct Label*)obj_l, w, h);
+    Widget_SetSize((struct Widget*)obj_l, w, h);
 
     return Py_BuildValue("i", NULL);
 }

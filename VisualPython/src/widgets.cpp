@@ -45,11 +45,8 @@ struct Widget* Widget_New(struct Widget *parent) {
 }
 
 void Widget_SetVisible(struct Widget *widget, bool v) {
-    printf("4 - %s\n", (((QWidget*)widget)->metaObject()->className()));
     QWidget * a = ((QWidget*)widget);
-    printf("5 - %s\n", a->metaObject()->className());
-    a->setVisible(true); // SEGFAULT!!
-    printf("6\n");
+    a->setVisible(v);
 }
 void Widget_SetWindowTitle(struct Widget *widget, const char *title) {
     ((QWidget*)widget)->setWindowTitle(QString(title));
