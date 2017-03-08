@@ -1,0 +1,1 @@
+/usr/bin/gcc     CMakeFiles/asm-scal.dir/main.c.o  -o asm-scal 

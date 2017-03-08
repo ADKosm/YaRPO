@@ -1,0 +1,3 @@
+/home/alex/vms/YaRPO/Assembler/share/build-asm-scal-Desktop_Qt_5_8_0_GCC_64bit-По умолчанию/CMakeFiles/edit_cache.dir
+/home/alex/vms/YaRPO/Assembler/share/build-asm-scal-Desktop_Qt_5_8_0_GCC_64bit-По умолчанию/CMakeFiles/rebuild_cache.dir
+/home/alex/vms/YaRPO/Assembler/share/build-asm-scal-Desktop_Qt_5_8_0_GCC_64bit-По умолчанию/CMakeFiles/asm-scal.dir

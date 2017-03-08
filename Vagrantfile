@@ -9,13 +9,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider "virtualbox" do |v|
 	v.memory = 8096
 	v.cpus = 4
+#	v.gui = true
   end
 
   config.vm.box = "ubuntu/trusty64"
 
   config.vm.network "forwarded_port", guest: 3000, host: 8950, auto_correct: true
 
-  config.vm.synced_folder "VisualPython", "/var/VisualPython"
+  config.vm.synced_folder "Dart", "/var/Dart"
 
 #  $script = <<SCRIPT
 #cd /vagrant/share
