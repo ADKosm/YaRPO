@@ -25,7 +25,7 @@ class Cell {
     if(text.isEmpty || text[0] != "=") {
       plan.add(text);
     } else {
-      RegExp pattern = new RegExp(r"(ABS|SIN|LEN|\(|\)|\+|-|\*|/|[0-9]+|[a-zA-Z0-9]+)\s*");
+      RegExp pattern = new RegExp(r"(ABS|SIN|LEN|\(|\)|\+|-|\*|/|[0-9\.]+|[a-zA-Z0-9]+)\s*");
       List<String> lexems = new List<String>();
 
       for(Match m in pattern.allMatches(text.substring(1))) {
@@ -82,7 +82,7 @@ class Computator {
   Cell cell;
   Queue<String> computationMachine = new Queue<String>();
 
-  RegExp number = new RegExp(r"^[0-9]+$");
+  RegExp number = new RegExp(r"^[0-9\.]+$");
   RegExp opOrFunc = new RegExp(r"^(ABS|SIN|LEN|\+|-|\*|/)$");
 
   Computator(this.cell);
