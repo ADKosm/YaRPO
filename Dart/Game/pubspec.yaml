@@ -1,0 +1,14 @@
+name: Game
+description: A simple console application.
+version: 0.0.1
+#homepage: https://www.example.com
+#author: alex <email@example.com>
+
+environment:
+  sdk: '>=1.20.1 <2.0.0'
+
+#dependencies:
+#  path: ^1.4.1
+
+#dev_dependencies:
+#  test: ^0.12.0
