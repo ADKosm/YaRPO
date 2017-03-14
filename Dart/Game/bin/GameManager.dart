@@ -9,17 +9,14 @@ import 'GameCore.dart';
 class GameManager {
   HashMap<WebSocket, Player> players = new HashMap<WebSocket, Player> ();
   HashMap<String, Function> functions = new HashMap<String, Function>();
-  GameCore gameCore = new GameCore();
+  GameCore gameCore;
 
-  static final GameManager _singleton = new GameManager._internal();
-  factory GameManager() {
-    return _singleton;
-  }
-  GameManager._internal() {
+  GameManager() {
     functions["changeName"] = this.changeName;
     functions["removePlayer"] = this.removePlayer;
     functions["changePosition"] = this.changePosition;
     functions["setPoint"] = this.setPoint;
+    gameCore = new GameCore(this);
   }
 
   void addPlayer(WebSocket socket) {
@@ -35,8 +32,8 @@ class GameManager {
     });
   }
 
-  void changeName(Player player, var param) { // param is String
-    player.name = param;
+  void changeName(Player player, var param) { // param is {name}
+    player.name = param['name'];
     gameCore.redraw();
   }
   void removePlayer(Player player, var param) { // param is null

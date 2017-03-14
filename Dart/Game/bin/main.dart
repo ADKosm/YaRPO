@@ -37,19 +37,3 @@ void main(List<String> args) {
     });
   });
 }
-
-//
-//socket.listen((_){
-//print(_.toString());
-//}, onDone: (){
-//print("Socket was closed");
-//});
-//socket.add(
-//JSON.encode({
-//"type": "hello",
-//"value" : {
-//"x": 1,
-//"y": 2
-//}
-//})
-//);

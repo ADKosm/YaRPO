@@ -5,27 +5,85 @@
 const cellSize = 35;
 const cellCount = 20; // !must be equal to cellCount on server
 
-function Router(connection) {
+function Router(connection, painter) {
     this.connection = connection;
+    this.painter = painter;
+    var self = this;
     this.routeTable = {
-        'hello': function (data) {
-            alert("Hello" + data.toString());
+        'drawCell': function (data) { // data is {color, x, y}
+            self.painter.drawCell(data);
+        },
+        'drawCurrentPlayer': function (data) { // data is {color, name}
+            self.painter.drawCurrentPlayer(data);
+        },
+        'drawMyName': function (data) { // data is {color, name}
+            self.painter.drawMe(data);
+        },
+        'winner': function (data) { // data is {name}
+            alert("Winner: " + data.name);
+            self.connection.close();
+            location.reload();
         }
     };
     var self = this;
     this.connection.onmessage = function (event) {
-        alert(event.data);
         var data = JSON.parse(event.data);
-        self.routeTable[data.type](data);
+        self.routeTable[data.type](data.value);
     }
 }
 
-function Sender() {
+function Sender(connection) {
+    this.connection = connection;
+    this.sendMessage = function (type, value) {
+        this.connection.send(JSON.stringify({
+            "type": type,
+            "value": value
+        }));
+    };
+    var self = this;
+    this.connect = function () {
+        var updateNameButton = document.getElementById('updateName');
+        updateNameButton.addEventListener('click', function () {
+            var nameField = document.getElementById('nameField');
+            self.sendMessage('changeName', {
+                'name': nameField.textContent
+            });
+        });
 
+        document.addEventListener('keydown', function (event) {
+            switch (event.code) {
+                case 'KeyW':
+                    self.sendMessage('changePosition', {
+                        'dx': 0,
+                        'dy': -1
+                    });
+                    break;
+                case 'KeyA':
+                    self.sendMessage('changePosition', {
+                        'dx': -1,
+                        'dy': 0
+                    });
+                    break;
+                case 'KeyS':
+                    self.sendMessage('changePosition', {
+                        'dx': 0,
+                        'dy': 1
+                    });
+                    break;
+                case 'KeyD':
+                    self.sendMessage('changePosition', {
+                        'dx': 1,
+                        'dy': 0
+                    });
+                    break;
+            }
+        });
+    }
 }
 
-function Painter(context) {
+function Painter(context, sender) {
     this.ctx = context;
+    this.sender = sender;
     this.drawCurrentPlayer = function (player) {
         var name = player.name;
         var color = player.color;
@@ -71,6 +129,20 @@ function Painter(context) {
         this.ctx.fillText("Me: " + name, cellSize * cellCount/2 + 5, cellSize * 3 / 4);
         this.ctx.strokeText("Me: " + name, cellSize * cellCount/2 + 5, cellSize * 3 / 4);
     };
+    var self = this;
+    this.ctx.canvas.onmousedown = function (event) {
+        var realX = Math.floor((event.offsetX) / cellSize);
+        var realY = Math.floor((event.offsetY - cellSize) / cellSize);
+
+        if(realX >= 0 && realY >= 0) {
+            // alert(realX.toString() + " " + realY.toString());
+            self.sender.sendMessage('setPoint', {
+                'x': realX,
+                'y': realY
+            });
+        }
+    }
+
 }
 
 
@@ -84,34 +156,23 @@ function Painter(context) {
     canvas.setAttribute('height', (cellCount + 1) * cellSize);
 
     var nameField = document.getElementById('nameField');
-    var updateNameButton = document.getElementById('updateName');
-
-    nameField.value = Math.random().toString(36).substring(2, 6);
+    nameField.textContent = Math.random().toString(36).substring(2, 6);
 
     var connection = new WebSocket("ws://" +
         window.location.hostname + ":" + window.location.port +
         "/ws");
 
     connection.onopen = function () {
-        connection.send("Hello, YOPTA");
-        setTimeout(function () {
-            connection.send("Hello, YOPTA AGAIN!"); // send my name
-        }, 1000);
+        var sender = new Sender(connection);
+        var painter = new Painter(context, sender);
+        var router = new Router(connection, painter);
 
-        var router = new Router(connection);
+        sender.connect();
+
+        sender.sendMessage('changeName', {
+            'name': nameField.textContent
+        }); // send my name
+
     };
-
-    // var painter = new Painter(context);
-    // painter.drawCurrentPlayer({ name: "Vala", color: "green"});
-    // painter.drawMe({name : nameField.value, color: "blue"});
-    // for(var i = 0; i < cellCount; i++) {
-    //     for(var j = 0; j < cellCount; j++) {
-    //         painter.drawCell({
-    //             x: i,
-    //             y: j,
-    //             color: '#8eee9d'
-    //         });
-    //     }
-    // }
 
 })();

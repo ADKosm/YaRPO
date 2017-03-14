@@ -4,6 +4,7 @@ class GameOrder {
   OrderUnit root = null;
 
   Player current() {
+    if(root == null) return null;
     return root.player;
   }
   void next() {
@@ -22,10 +23,15 @@ class GameOrder {
     }
   }
   void removePlayer(Player player) {
+    if(root == null) return;
     if(root.player == player) {
       root.previous.next = root.next;
       root.next.previous = root.previous;
-      root = root.next;
+      if(root == root.next) { // if single player
+        root = null;
+      } else {
+        root = root.next;
+      }
     } else {
       for(OrderUnit current = root.next;; current = current.next) {
         if(current == root) break;

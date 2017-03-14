@@ -8,12 +8,13 @@ import 'Painter.dart';
 class GameCore {
   GameManager manager;
 
-  GameCore() {
-    manager = new GameManager();
+  GameCore(GameManager man) {
+    manager = man;
     startNewGame();
   }
 
   HashMap<Point, Player> field = new HashMap<Point, Player>();
+  Set<Player> players = new Set<Player>();
   GameOrder order = new GameOrder();
   Painter painter = new Painter();
 
@@ -49,8 +50,10 @@ class GameCore {
       }
 
       if(successes >= 5) {
+        painter.winner(players, player);
+        startNewGame();
         redraw();
-        painter.winner(player);
+        return;
       }
     }
 
@@ -59,20 +62,26 @@ class GameCore {
   }
   void addPlayer(Player player) {
     order.addPlayer(player);
+    players.add(player);
     redraw();
   }
   void removePlayer(Player player) {
     order.removePlayer(player);
+    players.remove(player);
     redraw();
   }
   void startNewGame() {
-    for(Player p in field.values) p.socket.close();
+    for(Player p in players) p.socket.close();
     field.clear();
     order.clear();
+    players.clear();
     manager.clear();
+    redraw();
   } // TODO: call in constructor
 
   void redraw() {
-    painter.redrawAll(field.values, field, order.current());
+    if(order.current() != null) {
+      painter.redrawAll(players, field, order.current());
+    }
   }
 }
