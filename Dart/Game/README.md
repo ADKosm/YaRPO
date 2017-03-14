@@ -1,6 +1,6 @@
 # 5 in a row Online
 
-#Lanuch
+# Lanuch
 
 * Clone this repository 
 ```
