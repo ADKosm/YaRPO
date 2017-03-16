@@ -50,9 +50,9 @@ class GameCore {
       }
 
       if(successes >= 5) {
+        redraw();
         painter.winner(players, player);
         startNewGame();
-        redraw();
         return;
       }
     }

@@ -6,7 +6,7 @@ import 'GameManager.dart';
 void main(List<String> args) {
   GameManager gameManager = new GameManager();
 
-  HttpServer.bind('localhost', 8888).then( (HttpServer server) {
+  HttpServer.bind('0.0.0.0', 8888).then( (HttpServer server) {
     server.listen( (HttpRequest req) {
       if ('/ws' == req.uri.path) {
         WebSocketTransformer.upgrade(req).then( (WebSocket socket) {
