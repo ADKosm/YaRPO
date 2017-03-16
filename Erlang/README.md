@@ -8,7 +8,7 @@
 
 ```
 git clone https://github.com/ADKosm/YaRPO.git
-cd Erlang
+cd YaRPO/Erlang
 ```
 
 * To hardcode text in image: `./LSB.erl from.bmp to.bmp text`
