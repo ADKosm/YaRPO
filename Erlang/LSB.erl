@@ -15,7 +15,14 @@
 -export([main/1]).
 
 -define(BPP, 3).
--include("image_rec.hrl").
+%% -include("image_rec.hrl").
+
+-record(image, {
+  width = 0,
+  height = 0,
+  contents,
+  headers
+}).
 
 load(jpeg, _FileName) -> {error, not_implemented};
 load(bmp, FileName) ->
@@ -48,7 +55,7 @@ parse_contents(Contents) ->
 
 %% -- decoder --
 delsb([A, B, C, D| Rest], Acc) ->
-  case A of
+  case A+B+C+D of
     0 -> lists:reverse(Acc);
     (_) ->
       Byte = ((A band 2#11) bsl 6) + ((B band 2#11) bsl 4) + ((C band 2#11) bsl 2) + ((D band 2#11)),
@@ -80,6 +87,12 @@ bin_partize([S|Rest], Acc) ->
   D = S band 2#11,
   bin_partize(Rest, lists:append(Acc, [A, B, C, D])).
 
+words_to_text([], Acc) ->
+  string:strip(Acc);
+words_to_text([S | Rest], Acc) ->
+  words_to_text(Rest, string:concat(Acc, string:concat(" ", S))).
+
+
 %% decoder
 main([FileFrom]) ->
   {ok, Image} = load(bmp, FileFrom),
@@ -87,8 +100,9 @@ main([FileFrom]) ->
   io:fwrite("~n");
 
 %% encoder
-main([FileFrom, FileTo, Text]) ->
+main([FileFrom, FileTo | Words]) ->
   {ok, Image} = load(bmp, FileFrom),
+  Text = words_to_text(Words, ""),
   Bits = bin_partize(binary_to_list(unicode:characters_to_binary(Text)), []),
   Coded_content = lsb(Bits, binary_to_list(Image#image.contents), []),
   file:write_file(FileTo, list_to_binary(lists:append(binary_to_list(Image#image.headers), Coded_content))).
