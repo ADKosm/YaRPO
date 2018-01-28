@@ -3,8 +3,8 @@
 # Launch
 
 * Clone repository
-``` 
-git clone https://github.com/ADKosm/YaRPO.git 
+```
+git clone https://github.com/ADKosm/YaRPO.git
 cd YaRPO/Dart/HW2
 ```
 
@@ -22,6 +22,11 @@ sudo apt-get install dart
 ```
 /usr/lib/dart/bin/pub get
 /usr/lib/dart/bin/pub serve
+```
+
+* Or just use Docker:
+```
+docker-compose up --build
 ```
 
 * Open http://localhost:8080 on your Web Browser
