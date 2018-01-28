@@ -2,9 +2,9 @@
 
 # Lanuch
 
-* Clone this repository 
+* Clone this repository
 ```
-git clone https://github.com/ADKosm/YaRPO.git 
+git clone https://github.com/ADKosm/YaRPO.git
 cd YaRPO/Dart/Game
 ```
 
@@ -21,6 +21,11 @@ sudo apt-get install dart
 * Run applicarion
 ```
 dart bin/main.dart
+```
+
+* Or just use Docker:
+```
+docker-compose up --build
 ```
 
 * Open http://localhost:8888 on your Web Browser
